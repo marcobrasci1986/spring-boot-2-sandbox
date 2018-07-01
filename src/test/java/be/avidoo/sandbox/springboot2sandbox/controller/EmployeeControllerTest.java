@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
 
     public static final String EMPLOYEES_JSON = "employees.json";
+    public static final String EMPLOYEE_JSON = "employee.json";
 
     @Autowired
     private MockMvc mvc;
@@ -52,6 +53,16 @@ public class EmployeeControllerTest {
                 .andExpect(status().isOk()).andExpect(content().json(expectedJson));
     }
 
+    @Test
+    public void TEST_FIND_BY_FIRST_NAME() throws Exception {
+        String expectedJson = TestUtils.readFileAsString(this.getClass(), EMPLOYEE_JSON);
+
+        given(this.employeeService.findByFirstName("John")).willReturn(createEmployeeListSignleEntry());
+
+        this.mvc.perform(get("/api/employee/{firstName}", "John").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(content().json(expectedJson));
+    }
+
     private List<Employee> createEmployeeList() {
         List<Employee> employeeList = new ArrayList<>();
         employeeList.add(Employee.builder().firstName("John").lastName("Doe").build());
@@ -59,4 +70,13 @@ public class EmployeeControllerTest {
 
         return employeeList;
     }
+
+    private List<Employee> createEmployeeListSignleEntry() {
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(Employee.builder().firstName("John").lastName("Doe").build());
+
+        return employeeList;
+    }
+
+
 }
