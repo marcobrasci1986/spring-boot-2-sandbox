@@ -10,7 +10,7 @@ public class HomeController extends BaseController {
 
     @GetMapping
     public String home() {
-        return "home";
+        return "This is the base controller";
     }
 
 

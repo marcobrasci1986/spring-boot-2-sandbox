@@ -23,4 +23,8 @@ public class EmployeeService {
         return this.employeeRepository.findAll();
     }
 
+    public List<Employee> findByFirstName(String firstName) {
+        return this.employeeRepository.findByFirstName(firstName);
+    }
+
 }
