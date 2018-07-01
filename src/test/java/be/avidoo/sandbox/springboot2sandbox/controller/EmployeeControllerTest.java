@@ -57,7 +57,7 @@ public class EmployeeControllerTest {
     public void TEST_FIND_BY_FIRST_NAME() throws Exception {
         String expectedJson = TestUtils.readFileAsString(this.getClass(), EMPLOYEE_JSON);
 
-        given(this.employeeService.findByFirstName("John")).willReturn(createEmployeeListSignleEntry());
+        given(this.employeeService.findByFirstName("John")).willReturn(createEmployeeListSingleEntry());
 
         this.mvc.perform(get("/api/employee/{firstName}", "John").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(content().json(expectedJson));
@@ -71,7 +71,7 @@ public class EmployeeControllerTest {
         return employeeList;
     }
 
-    private List<Employee> createEmployeeListSignleEntry() {
+    private List<Employee> createEmployeeListSingleEntry() {
         List<Employee> employeeList = new ArrayList<>();
         employeeList.add(Employee.builder().firstName("John").lastName("Doe").build());
 

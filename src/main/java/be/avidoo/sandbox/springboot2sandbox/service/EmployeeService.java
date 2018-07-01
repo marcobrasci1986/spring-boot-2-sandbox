@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -36,6 +37,13 @@ public class EmployeeService {
         Employee detachedEmployee = employeeMapper.toEntity(employeeCommand);
         Employee savedEmployee = employeeRepository.save(detachedEmployee);
         return employeeMapper.toCommand(savedEmployee);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+
+        employee.ifPresent(employeeRepository::delete);
     }
 
 }

@@ -36,4 +36,14 @@ public class EmployeeServiceIntegrationTest {
         assertThat(savedEmployee.getBirthDate(), is(employeeCommand.getBirthDate()));
         assertThat(savedEmployee.getDepartmentId(), is(employeeCommand.getDepartmentId()));
     }
+
+    @Test
+    public void TEST_DELETE_EMPLOYEE() {
+
+        assertThat(employeeService.findAll().size(), is(3));
+
+        employeeService.delete(1001L);
+
+        assertThat(employeeService.findAll().size(), is(2));
+    }
 }
