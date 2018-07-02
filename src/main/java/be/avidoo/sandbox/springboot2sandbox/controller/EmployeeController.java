@@ -30,10 +30,18 @@ public class EmployeeController extends BaseController {
         return this.employeeService.findAll();
     }
 
-    @ApiOperation(value = "Find an employee by its firstName")
-    @GetMapping(path = "/employee/{firstName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Employee> findByFirstName(@PathVariable String firstName) {
-        return this.employeeService.findByFirstName(firstName);
+    /// TODO /search with criteria
+
+//    @ApiOperation(value = "Find an employee by its firstName")
+//    @GetMapping(path = "/employee/{firstName}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public List<Employee> findByFirstName(@PathVariable String firstName) {
+//        return this.employeeService.findByFirstName(firstName);
+//    }
+
+    @ApiOperation(value = "Find an employee by its id")
+    @GetMapping(path = "/employee/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Employee findById(@PathVariable Long id) {
+        return this.employeeService.findById(id);
     }
 
     /**

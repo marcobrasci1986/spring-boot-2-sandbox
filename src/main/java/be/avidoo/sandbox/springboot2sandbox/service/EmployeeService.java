@@ -1,6 +1,7 @@
 package be.avidoo.sandbox.springboot2sandbox.service;
 
 import be.avidoo.sandbox.springboot2sandbox.commands.EmployeeCommand;
+import be.avidoo.sandbox.springboot2sandbox.exceptions.NotFoundException;
 import be.avidoo.sandbox.springboot2sandbox.mappers.EmployeeMapper;
 import be.avidoo.sandbox.springboot2sandbox.model.Employee;
 import be.avidoo.sandbox.springboot2sandbox.repository.EmployeeRepository;
@@ -46,4 +47,11 @@ public class EmployeeService {
         employee.ifPresent(employeeRepository::delete);
     }
 
+    public Employee findById(Long id) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (!employee.isPresent()) {
+            throw new NotFoundException(String.format("Employee with id %s not found", id));
+        }
+        return employee.get();
+    }
 }
