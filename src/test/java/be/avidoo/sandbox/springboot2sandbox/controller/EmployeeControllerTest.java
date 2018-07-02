@@ -1,5 +1,6 @@
 package be.avidoo.sandbox.springboot2sandbox.controller;
 
+import be.avidoo.sandbox.springboot2sandbox.exceptions.NotFoundException;
 import be.avidoo.sandbox.springboot2sandbox.model.Employee;
 import be.avidoo.sandbox.springboot2sandbox.service.EmployeeService;
 import be.avidoo.sandbox.springboot2sandbox.utils.TestUtils;
@@ -14,12 +15,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import static be.avidoo.sandbox.springboot2sandbox.controller.aspect.AbstractAdvice.EXCEPTION_CODE_HEADER_NAME;
+import static be.avidoo.sandbox.springboot2sandbox.controller.aspect.AbstractAdvice.EXCEPTION_MESSAGE_HEADER_NAME;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * @WebMvcTest also auto-configures MockMvc. Mock MVC offers a powerful way to quickly test MVC controllers without needing to start a full HTTP server.
@@ -29,17 +31,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
 
     public static final String EMPLOYEES_JSON = "employees.json";
-    public static final String EMPLOYEE_JSON = "employee.json";
 
     @Autowired
-    private MockMvc mvc;
+    private MockMvc mockMvc;
     @MockBean
     private EmployeeService employeeService;
 
 
     @Test
     public void TEST_HELLO_WORLD() throws Exception {
-        this.mvc.perform(
+        this.mockMvc.perform(
                 get("/api/hello-world").accept(MediaType.TEXT_PLAIN_VALUE))
                 .andExpect(status().isOk()).andExpect(content().string("hello world"));
     }
@@ -50,20 +51,21 @@ public class EmployeeControllerTest {
 
         given(this.employeeService.findAll()).willReturn(createEmployeeList());
 
-        this.mvc.perform(get("/api/employees").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get("/api/employees").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(content().json(expectedJson));
     }
 
 
-//    @Test
-//    public void TEST_FIND_BY_FIRST_NAME() throws Exception {
-//        String expectedJson = TestUtils.readFileAsString(this.getClass(), EMPLOYEE_JSON);
-//
-//        given(this.employeeService.findByFirstName("John")).willReturn(createEmployeeListSingleEntry());
-//
-//        this.mvc.perform(get("/api/employee/{firstName}", "John").accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk()).andExpect(content().json(expectedJson));
-//    }
+    @Test
+    public void TEST_FIND_BY_ID() throws Exception {
+        String errorMessage = "Some error message";
+        given(this.employeeService.findById(888L)).willThrow(new NotFoundException(errorMessage));
+
+        this.mockMvc.perform(get("/api/employee/{id}", 888l).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(header().string(EXCEPTION_CODE_HEADER_NAME, equalTo(NotFoundException.ERROR_CODE)))
+                .andExpect(header().string(EXCEPTION_MESSAGE_HEADER_NAME, equalTo(errorMessage)));
+    }
 
     private List<Employee> createEmployeeList() {
         List<Employee> employeeList = new ArrayList<>();
@@ -72,13 +74,5 @@ public class EmployeeControllerTest {
 
         return employeeList;
     }
-
-    private List<Employee> createEmployeeListSingleEntry() {
-        List<Employee> employeeList = new ArrayList<>();
-        employeeList.add(Employee.builder().firstName("John").lastName("Doe").build());
-
-        return employeeList;
-    }
-
 
 }
