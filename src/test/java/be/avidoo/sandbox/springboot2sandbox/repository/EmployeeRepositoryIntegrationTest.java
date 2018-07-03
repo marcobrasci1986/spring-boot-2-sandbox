@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,11 +36,23 @@ public class EmployeeRepositoryIntegrationTest {
     }
 
     @Test
-    public void TEST_FIND_BY_CRITERIA() {
+    public void TEST_FIND_BY_CRITERIA_FIRST_NAME_AND_LAST_NAME() {
         EmployeeSearchCriteria criteria = EmployeeSearchCriteria.builder().firstName("Eden").lastName("Hazard").build();
         List<Employee> allEmployees = employeeRepository.findByCriteria(criteria);
 
         assertThat(allEmployees.size(), is(1));
         assertThat(allEmployees.get(0).getLastName(), is("Hazard"));
+    }
+
+    @Test
+    public void TEST_FIND_BY_DATE_RANGE() {
+        EmployeeSearchCriteria criteria = EmployeeSearchCriteria.builder()
+                .birthDateFrom(LocalDate.of(1986, Month.JANUARY, 1))
+                .birthDateTo(LocalDate.of(1990, Month.JANUARY, 1))
+                .build();
+        List<Employee> allEmployees = employeeRepository.findByCriteria(criteria);
+
+        assertThat(allEmployees.size(), is(1));
+        assertThat(allEmployees.get(0).getLastName(), is("Doe"));
     }
 }

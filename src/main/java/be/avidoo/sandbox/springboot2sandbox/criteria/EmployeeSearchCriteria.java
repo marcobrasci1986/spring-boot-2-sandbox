@@ -11,5 +11,6 @@ import java.time.LocalDate;
 public class EmployeeSearchCriteria {
     private String firstName;
     private String lastName;
-    private LocalDate birthDate;
+    private LocalDate birthDateFrom;
+    private LocalDate birthDateTo;
 }

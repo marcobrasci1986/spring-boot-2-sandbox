@@ -34,6 +34,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepositoryCustom {
             booleanBuilder.and(employee.lastName.eq(searchCriteria.getLastName()));
         }
 
+        if (searchCriteria.getBirthDateFrom() != null && searchCriteria.getBirthDateTo() != null) {
+            booleanBuilder.and(employee.birthDate.between(searchCriteria.getBirthDateFrom(), searchCriteria.getBirthDateTo()));
+        }
+
         return query
                 .select(employee)
                 .from(employee)
