@@ -1,5 +1,6 @@
 package be.avidoo.sandbox.springboot2sandbox.repository;
 
+import be.avidoo.sandbox.springboot2sandbox.criteria.EmployeeSearchCriteria;
 import be.avidoo.sandbox.springboot2sandbox.model.Employee;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,15 @@ public class EmployeeRepositoryIntegrationTest {
     @Test
     public void TEST_FIND_BY_FIRST_NAME() {
         List<Employee> allEmployees = employeeRepository.findByFirstName("Eden");
+        assertThat(allEmployees.size(), is(1));
+        assertThat(allEmployees.get(0).getLastName(), is("Hazard"));
+    }
+
+    @Test
+    public void TEST_FIND_BY_CRITERIA() {
+        EmployeeSearchCriteria criteria = EmployeeSearchCriteria.builder().firstName("Eden").lastName("Hazard").build();
+        List<Employee> allEmployees = employeeRepository.findByCriteria(criteria);
+
         assertThat(allEmployees.size(), is(1));
         assertThat(allEmployees.get(0).getLastName(), is("Hazard"));
     }
