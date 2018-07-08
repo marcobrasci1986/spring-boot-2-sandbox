@@ -3,9 +3,9 @@ package be.avidoo.sandbox.springboot2sandbox.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
+@Table(name = "DEPARTMENT", schema = "demo")
 @Getter
 @EqualsAndHashCode
 @ToString
@@ -16,10 +16,10 @@ public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
     private Long id;
+
+    @Column(name = "DEPARTMENT_NAME")
     private String departmentName;
-
-//    @OneToMany(mappedBy = "department")
-//    private List<Employee> employees;
-
+    
 }
