@@ -1,0 +1,5 @@
+Development
+-----------
+
+docker run -p 3306:3306 --name demo-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=demo -e MYSQL_USER=demo_user -e MYSQL_PASSWORD=demo_pass -d mysql:latest
+docker start [container-id]
