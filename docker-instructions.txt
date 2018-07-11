@@ -1,5 +1,32 @@
-Development
------------
+Docker notes:
+--------------
+
+MySQL:
+---------
 
 docker run -p 3306:3306 --name demo-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=demo -e MYSQL_USER=demo_user -e MYSQL_PASSWORD=demo_pass -d mysql:latest
 docker start [container-id]
+
+-d: run the background (Daemon process)
+-p: expose port
+example: -p 8080:15672 means: link localhost:8080 to the port 15672 of the thing you are running in the container
+-v: volume associated with the container
+-h or --hostname:
+-e: set environment variable
+
+other example of mysql run:
+
+docker run --name guru-mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -v /Users/jt/tmp:/var/lib/mysql -p 3306:3306 -d mysql:lastest
+-v: specifies a volume (allocate storage)
+
+
+Rabbit MQ:
+------------
+
+port: 5671 5672 (broker itself)
+port: 15671, 15672 (management)
+
+docker run -d --hostname guru-rabbit --name some-rabbit -p 8080:15672 -p 5671:5671 -p 5672:5672 rabbitmq:3-management
+
+Rabbit mq is now running on http://localhost:8080/#/.
+Login/password is guest/guest
