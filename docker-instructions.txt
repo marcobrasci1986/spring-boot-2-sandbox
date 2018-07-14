@@ -1,6 +1,7 @@
-Docker notes:
+Docker notes(https://springframework.guru/docker-cheat-sheet-for-spring-devlopers/):
 --------------
 
+docker logs -f <container-name>
 MySQL:
 ---------
 
@@ -8,11 +9,12 @@ docker run -p 3306:3306 --name demo-mysql -e MYSQL_ROOT_PASSWORD=password -e MYS
 docker start [container-id]
 
 -d: run the background (Daemon process)
--p: expose port
+-p <host-port>:<container-port>: expose port
 example: -p 8080:15672 means: link localhost:8080 to the port 15672 of the thing you are running in the container
 -v: volume associated with the container
 -h or --hostname:
 -e: set environment variable
+
 
 other example of mysql run:
 
@@ -30,3 +32,17 @@ docker run -d --hostname guru-rabbit --name some-rabbit -p 8080:15672 -p 5671:56
 
 Rabbit mq is now running on http://localhost:8080/#/.
 Login/password is guest/guest
+
+
+
+
+
+Docker house keeping (clean up resources):
+-----------------------------------------
+-q: quit
+-f: filter
+
+3 areas: Containers, Images, Volumes
+see DockerHouseKeeping.pdf for more information
+
+dangling: volume no longer associated with a container
