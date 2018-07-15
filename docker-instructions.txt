@@ -19,7 +19,7 @@ example: -p 8080:15672 means: link localhost:8080 to the port 15672 of the thing
 other example of mysql run:
 
 docker run --name guru-mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -v /Users/jt/tmp:/var/lib/mysql -p 3306:3306 -d mysql:lastest
--v: specifies a volume (allocate storage)
+-v <host path>:<container path> specifies a volume (allocate storage)
 
 
 Rabbit MQ:
@@ -46,3 +46,12 @@ Docker house keeping (clean up resources):
 see DockerHouseKeeping.pdf for more information
 
 dangling: volume no longer associated with a container
+
+
+
+docker build -t <tag name>
+mvn clean package docker:build
+docker rm <container name>
+docker rmi <image name>
+docker exec -it <containername> bash
+mvn docker:start
